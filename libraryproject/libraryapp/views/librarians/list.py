@@ -1,13 +1,13 @@
 import sqlite3
 from django.shortcuts import render
 from libraryapp.models import Librarian
-from libraryapp.models import modelfactory
+from libraryapp.models import model_factory
 from ..connection import Connection
 
 
 def list_librarians(request):
     with sqlite3.connect(Connection.db_path) as conn:
-        conn.row_factory = modelfactory(Librarian)
+        conn.row_factory = model_factory(Librarian)
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
