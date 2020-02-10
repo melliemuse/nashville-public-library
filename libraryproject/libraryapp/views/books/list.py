@@ -11,6 +11,22 @@ from ..connection import Connection
 def book_list(request):
     if request.method == 'GET':
         with sqlite3.connect(Connection.db_path) as conn:
+            # sqlite3.Row - allows us to reference keys on tuples which are columns in dataset
+            # end up with list of class instances 
+            # conn.row_factory = sqlite3.Row
+            # db_cursor = conn.cursor()
+
+            # db_cursor.execute("""
+            # select
+            #     b.id,
+            #     b.title,
+            #     b.isbn,
+            #     b.author,
+            #     b.year_published,
+            #     b.librarian_id,
+            #     b.location_id
+            # from libraryapp_book b
+            # """)
             conn.row_factory = model_factory(Book)
             db_cursor = conn.cursor()
 
@@ -30,10 +46,11 @@ def book_list(request):
 
             
         template = 'books/list.html'
+        # dictionary of values being passed into template
         context = {
             'all_books': all_books
         }
-
+        # positional args passing into render method
         return render(request, template, context)
 
     elif request.method == 'POST':
